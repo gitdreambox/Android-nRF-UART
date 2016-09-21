@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 
 
 import android.app.Activity;
@@ -144,6 +144,7 @@ public class DeviceListActivity extends Activity {
                 @Override
                 public void run() {
 					mScanning = false;
+
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                         
                     cancelButton.setText(R.string.scan);
@@ -152,7 +153,9 @@ public class DeviceListActivity extends Activity {
             }, SCAN_PERIOD);
 
             mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+            UUID[] uuid=new UUID[1];
+            uuid[0]=UartService.GIZWITS_SERVICE_UUID;
+            mBluetoothAdapter.startLeScan(uuid,mLeScanCallback);
             cancelButton.setText(R.string.cancel);
         } else {
             mScanning = false;

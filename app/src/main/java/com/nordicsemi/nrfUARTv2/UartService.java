@@ -39,7 +39,6 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,7 +77,7 @@ public class UartService extends Service {
     public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     public static final UUID FIRMWARE_REVISON_UUID = UUID.fromString("00002a26-0000-1000-8000-00805f9b34fb");
     public static final UUID DIS_UUID = UUID.fromString("0000180a-0000-1000-8000-00805f9b34fb");
-    public static final UUID RX_SERVICE_UUID = UUID.fromString("0000FFB0-0000-1000-8000-00805f9b34fb");
+    public static final UUID GIZWITS_SERVICE_UUID = UUID.fromString("0000FFB0-0000-1000-8000-00805f9b34fb");
     public static final UUID RX_CHAR_UUID = UUID.fromString("0000FFB1-0000-1000-8000-00805f9b34fb");
     public static final UUID TX_CHAR_UUID = UUID.fromString("0000FFB2-0000-1000-8000-00805f9b34fb");
     private byte[] mBuffer;
@@ -113,8 +112,8 @@ public class UartService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt);
-                final BluetoothGattService service = gatt.getService(RX_SERVICE_UUID);
+            	Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt );
+                final BluetoothGattService service = gatt.getService(GIZWITS_SERVICE_UUID);
                 if (service != null) {
                     mRXCharacteristic = service.getCharacteristic(RX_CHAR_UUID);
                     mTXCharacteristic = service.getCharacteristic(TX_CHAR_UUID);
@@ -145,8 +144,8 @@ public class UartService extends Service {
                 mBufferOffset += length;
                 mRXCharacteristic.setValue(data);
                 boolean ret = mBluetoothGatt.writeCharacteristic(mRXCharacteristic);
-                Log.d(TAG, hexUtils.bytesToHexString(data));
-                Log.d(TAG, "status=" + ret);
+                Log.d(TAG,hexUtils.bytesToHexString(data));
+                Log.d(TAG,"status=" + ret);
             }
         }
 
@@ -174,7 +173,7 @@ public class UartService extends Service {
         // This is handling for the notification on TX Character of NUS service
         if (TX_CHAR_UUID.equals(characteristic.getUuid())) {
 
-            // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
+           // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
             intent.putExtra(EXTRA_DATA, characteristic.getValue());
         } else {
 
@@ -233,10 +232,11 @@ public class UartService extends Service {
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
+     *
      * @return Return true if the connection is initiated successfully. The connection result
-     * is reported asynchronously through the
-     * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     * callback.
+     *         is reported asynchronously through the
+     *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
+     *         callback.
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
@@ -282,7 +282,7 @@ public class UartService extends Service {
             return;
         }
         mBluetoothGatt.disconnect();
-        // mBluetoothGatt.close();
+       // mBluetoothGatt.close();
     }
 
     /**
@@ -318,34 +318,35 @@ public class UartService extends Service {
      * Enables or disables notification on a give characteristic.
      *
 
-     */
+    */
 
     /**
      * Enable Notification on TX characteristic
      *
      * @return
      */
-    public void enableTXNotification() {
-        /*
+    public void enableTXNotification()
+    {
+    	/*
     	if (mBluetoothGatt == null) {
     		showMessage("mBluetoothGatt null" + mBluetoothGatt);
     		broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
     		return;
     	}
     		*/
-        BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-        if (RxService == null) {
+    	BluetoothGattService RxService = mBluetoothGatt.getService(GIZWITS_SERVICE_UUID);
+    	if (RxService == null) {
             showMessage("Rx service not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-        BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
+    	BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
         if (TxChar == null) {
             showMessage("Tx charateristic not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-        mBluetoothGatt.setCharacteristicNotification(TxChar, true);
+        mBluetoothGatt.setCharacteristicNotification(TxChar,true);
 
         BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
@@ -353,23 +354,23 @@ public class UartService extends Service {
 
     }
 
-    public void writeRXCharacteristic(byte[] value) {
-        mBuffer = value;
-        mBufferOffset = 0;
+    public void writeRXCharacteristic(byte[] value)
+    {
+        mBuffer=value;
+        mBufferOffset=0;
         final int length = Math.min(mBuffer.length, MAX_PACKET_SIZE);
         final byte[] data = new byte[length]; // We send at most 20 bytes
         System.arraycopy(mBuffer, 0, data, 0, length);
         mBufferOffset += length;
         mRXCharacteristic.setValue(data);
         boolean ret = mBluetoothGatt.writeCharacteristic(mRXCharacteristic);
-        Log.d(TAG, hexUtils.bytesToHexString(data));
-        Log.d(TAG, "status=" + ret);
+        Log.d(TAG,hexUtils.bytesToHexString(data));
+        Log.d(TAG,"status=" + ret);
     }
 
     private void showMessage(String msg) {
         Log.e(TAG, msg);
     }
-
     /**
      * Retrieves a list of supported GATT services on the connected device. This should be
      * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.

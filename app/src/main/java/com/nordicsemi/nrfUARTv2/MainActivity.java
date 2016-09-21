@@ -140,7 +140,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 OTA();
                 break;
             case R.id.btnDataPoint:
-                DataPoint(new byte[2]);
+                byte[] b=new byte[]{0x05,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+                DataPoint(b);
                 break;
             case R.id.btnShowLog:
                 if (mLogSession != null) {
@@ -196,7 +197,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 final String log = intent.getStringExtra(ProtocolPacket.EXTRA_DATA);
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        printLog(log);
+                        //printLog(log);
+                        Logger.d(mLogSession, log);
                     }
                 });
             }
@@ -495,7 +497,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         RxPacket.setValue(b);
         mService.writeRXCharacteristic(RxPacket.getValue(0x05));
         printLog("DataPointReq:"
-                +"\r\ndata="+b
+                +"\r\ndata="+hexUtils.bytesToHexString(b)
                 + "\r\n"
         );
     }
