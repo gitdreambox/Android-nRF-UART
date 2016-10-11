@@ -170,7 +170,8 @@ public class ProtocolPacket {
             switch (this.cmd) {
                 case 0x01: {
                     int _offset = 0;
-                    String productKey = hexUtils.bytesToHexString(payload, offset, 16);
+                    int statusCode=payload[_offset++]&0xFF;
+                    String productKey = hexUtils.bytesToHexString(payload, _offset, 16);
                     _offset += 16;
                     String mac = hexUtils.bytesToHexString(payload, _offset, 6);
                     _offset += 6;
@@ -183,14 +184,18 @@ public class ProtocolPacket {
                 }
 
                 break;
-                case 0x02:
-                    boolean encrypt = payload[0] == 0 ? false : true;
-                    int random = (payload[4] & 0xFF) + ((payload[3] & 0xFF) << 8) + ((payload[2] & 0xFF) << 16) + ((payload[1] & 0xFF) << 24);
+                case 0x02: {
+                    int _offset = 0;
+                    int statusCode = payload[_offset++] & 0xFF;
+                    boolean encrypt = payload[_offset++] == 0 ? false : true;
+                    int random = (payload[_offset++] & 0xFF) + ((payload[_offset++] & 0xFF) << 8) + ((payload[_offset++] & 0xFF) << 16) + ((payload[_offset++] & 0xFF) << 24);
                     mCallbacks.AuthResponse(encrypt, random);
+                }
                     break;
-                case 0x03:
+                case 0x03: {
                     int statusCode = payload[0] & 0xFF;
                     mCallbacks.OTAResponse(statusCode);
+                }
                     break;
                 case 0x04:
                     String logRes = hexUtils.bytesToString(payload);
