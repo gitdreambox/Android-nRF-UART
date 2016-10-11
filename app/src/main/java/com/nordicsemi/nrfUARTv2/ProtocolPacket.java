@@ -274,6 +274,7 @@ public class ProtocolPacket {
     public void setValue(long value, int formatType) {
         switch (formatType) {
             case FORMAT_SINT8:
+                mValue[mValueOffset++]=(byte)value;
 //                value = intToSignedBits(value, 8);
 //                mValue[mValueOffset++] = (byte)(value & 0xFF);
             case FORMAT_UINT8:

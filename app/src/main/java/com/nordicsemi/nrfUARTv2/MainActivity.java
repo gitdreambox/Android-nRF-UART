@@ -51,6 +51,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +76,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
     private ArrayAdapter<String> listAdapter;
-    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnDataPoint, btnOTA, btnShowLog;
+    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnDataPoint, btnOTA, btnShowLog,btnSet;
+    private Spinner spinnerInterval,spinnerTxPower;
     private ProtocolPacket TxPacket, RxPacket;
     private ArrayList<Byte> buffer = new ArrayList<Byte>();
 
@@ -99,6 +101,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
         btnOTA = (Button) findViewById(R.id.btnOTA);
         btnShowLog = (Button) findViewById(R.id.btnShowLog);
+        btnSet = (Button) findViewById(R.id.btnSet);
+        spinnerInterval= (Spinner) findViewById(R.id.spinnerInterval);
+        spinnerTxPower= (Spinner) findViewById(R.id.spinnerTxPower);
         service_init();
         TxPacket = new ProtocolPacket(this);
         TxPacket.setGattCallbacks(this);
@@ -149,6 +154,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     //Intent intent = new Intent(Intent.ACTION_VIEW, ((LogSession) mLogSession).getSessionsUri());//Show all log sessions
                     startActivity(intent);
                 }
+                break;
+            case R.id.btnSet:
+                int[] intervalArray={6,15,24,39,80,400,800};
+                int[] txpowerArrsy={4,0,-20};
+                int interval=spinnerInterval.getSelectedItemPosition();
+                int txpower=spinnerTxPower.getSelectedItemPosition();
+                SetConnIntervalAndTxPower(intervalArray[interval],txpowerArrsy[txpower]);
                 break;
             default:
                 break;
@@ -213,6 +225,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnDataPoint.setEnabled(true);
                         btnOTA.setEnabled(true);
                         btnShowLog.setEnabled(true);
+                        btnSet.setEnabled(true);
                         ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - ready");
                         listAdapter.add("[" + currentDateTimeString + "] Connected to: " + mDevice.getName());
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
@@ -230,6 +243,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnAuth.setEnabled(false);
                         btnDataPoint.setEnabled(false);
                         btnOTA.setEnabled(false);
+                        btnSet.setEnabled(false);
                         ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
                         listAdapter.add("[" + currentDateTimeString + "] Disconnected to: " + mDevice.getName());
                         mState = UART_PROFILE_DISCONNECTED;
@@ -498,6 +512,16 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         mService.writeRXCharacteristic(RxPacket.getValue(0x05));
         printLog("DataPointReq:"
                 +"\r\ndata="+hexUtils.bytesToHexString(b)
+                + "\r\n"
+        );
+    }
+    private void SetConnIntervalAndTxPower(int interval,int txpower) {
+        RxPacket.setValue(interval, ProtocolPacket.FORMAT_UINT16);
+        RxPacket.setValue(txpower, ProtocolPacket.FORMAT_SINT8);
+        mService.writeRXCharacteristic(RxPacket.getValue(0xFF));
+        printLog("SetConnIntervalAndTxPower:"
+                + "\r\nConnInterval=" + interval
+                + "\r\nTxPower=" + txpower
                 + "\r\n"
         );
     }

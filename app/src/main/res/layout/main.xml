@@ -3,82 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Connect" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_weight="0.31"
-        android:orientation="vertical" >
-            <ListView
-                android:id="@+id/listMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="8">
-            </ListView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-            <Button
-                android:id="@+id/btnShowLog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:enabled="false"
-                android:text="Show Log" />
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
-                <Button
-                    android:id="@+id/btnSyncInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="SyncInfo" />
-                <Button
-                    android:id="@+id/btnAuth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="Auth" />
-                <Button
-                    android:id="@+id/btnOTA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="OTA" />
-                <Button
-                    android:id="@+id/btnDataPoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="DataPoint" />
-            </LinearLayout>
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
@@ -114,5 +38,98 @@
             android:text="_"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/btn_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Connect" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_weight="0.31"
+        android:orientation="vertical" >
+            <ListView
+                android:id="@+id/listMessage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="8">
+            </ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <Spinner
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:id="@+id/spinnerInterval"
+                android:entries="@array/interval" />
+
+            <Spinner
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:id="@+id/spinnerTxPower"
+                android:entries="@array/txpower" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Set"
+                android:id="@+id/btnSet"
+                android:enabled="false"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/btnShowLog"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="onClick"
+                android:enabled="false"
+                android:text="Log" />
+        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/btnSyncInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    android:enabled="false"
+                    android:text="SyncInfo" />
+                <Button
+                    android:id="@+id/btnAuth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    android:enabled="false"
+                    android:text="Auth" />
+                <Button
+                    android:id="@+id/btnOTA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    android:enabled="false"
+                    android:text="OTA" />
+                <Button
+                    android:id="@+id/btnDataPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    android:enabled="false"
+                    android:text="DataPoint" />
+            </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
