@@ -54,6 +54,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import no.nordicsemi.android.log.ILogSession;
 import no.nordicsemi.android.log.Logger;
@@ -76,7 +77,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
     private ArrayAdapter<String> listAdapter;
-    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnDataPoint, btnOTA, btnShowLog,btnSet;
+    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnOTA, btnShowLog,btnSet;
+    private ToggleButton btnLED0,btnLED1,btnLED2,btnLED3,btnLED4;
     private Spinner spinnerInterval,spinnerTxPower;
     private ProtocolPacket TxPacket, RxPacket;
     private ArrayList<Byte> buffer = new ArrayList<Byte>();
@@ -98,12 +100,17 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         btnConnectDisconnect = (Button) findViewById(R.id.btn_select);
         btnSyncInfo = (Button) findViewById(R.id.btnSyncInfo);
         btnAuth = (Button) findViewById(R.id.btnAuth);
-        btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
+        //btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
         btnOTA = (Button) findViewById(R.id.btnOTA);
         btnShowLog = (Button) findViewById(R.id.btnShowLog);
         btnSet = (Button) findViewById(R.id.btnSet);
         spinnerInterval= (Spinner) findViewById(R.id.spinnerInterval);
         spinnerTxPower= (Spinner) findViewById(R.id.spinnerTxPower);
+        btnLED0=(ToggleButton) findViewById(R.id.btnLED0);
+        btnLED1=(ToggleButton) findViewById(R.id.btnLED1);
+        btnLED2=(ToggleButton) findViewById(R.id.btnLED2);
+        btnLED3=(ToggleButton) findViewById(R.id.btnLED3);
+        btnLED4=(ToggleButton) findViewById(R.id.btnLED4);
         service_init();
         TxPacket = new ProtocolPacket(this);
         TxPacket.setGattCallbacks(this);
@@ -144,10 +151,47 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             case R.id.btnOTA:
                 OTA();
                 break;
-            case R.id.btnDataPoint:
-                byte[] b=new byte[]{0x05,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+//            case R.id.btnDataPoint: {
+//                byte[] b = new byte[]{0x05, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+//                DataPoint(b);
+//            }
+//                break;
+            case R.id.btnLED0:
+            {
+                byte[] b;
+                if(btnLED0.isChecked())  b = new byte[]{0x01, 0x01, 0x1F};
+                else b = new byte[]{0x01, 0x01, 0};
                 DataPoint(b);
                 break;
+            }
+            case R.id.btnLED1: {
+                byte[] b;
+                if(btnLED1.isChecked())  b = new byte[]{0x01, 0x02, 0x1F};
+                else b = new byte[]{0x01, 0x02, 0};
+                DataPoint(b);
+                break;
+            }
+            case R.id.btnLED2: {
+                byte[] b;
+                if(btnLED2.isChecked())  b = new byte[]{0x01, 0x04, 0x1F};
+                else b = new byte[]{0x01, 0x04, 0};
+                DataPoint(b);
+                break;
+            }
+            case R.id.btnLED3: {
+                byte[] b;
+                if(btnLED3.isChecked())  b = new byte[]{0x01, 0x08, 0x1F};
+                else b = new byte[]{0x01, 0x08, 0};
+                DataPoint(b);
+                break;
+            }
+            case R.id.btnLED4: {
+                byte[] b;
+                if(btnLED4.isChecked())  b = new byte[]{0x01, 0x10, 0x1F};
+                else b = new byte[]{0x01, 0x10, 0};
+                DataPoint(b);
+                break;
+            }
             case R.id.btnShowLog:
                 if (mLogSession != null) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, mLogSession.getSessionUri());//Show log entries
@@ -222,10 +266,15 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnConnectDisconnect.setText("Disconnect");
                         btnSyncInfo.setEnabled(true);
                         btnAuth.setEnabled(true);
-                        btnDataPoint.setEnabled(true);
+                        //btnDataPoint.setEnabled(true);
                         btnOTA.setEnabled(true);
                         btnShowLog.setEnabled(true);
                         btnSet.setEnabled(true);
+                        btnLED0.setEnabled(true);
+                        btnLED1.setEnabled(true);
+                        btnLED2.setEnabled(true);
+                        btnLED3.setEnabled(true);
+                        btnLED4.setEnabled(true);
                         ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - ready");
                         listAdapter.add("[" + currentDateTimeString + "] Connected to: " + mDevice.getName());
                         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
@@ -241,9 +290,14 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnConnectDisconnect.setText("Connect");
                         btnSyncInfo.setEnabled(false);
                         btnAuth.setEnabled(false);
-                        btnDataPoint.setEnabled(false);
+                        //btnDataPoint.setEnabled(false);
                         btnOTA.setEnabled(false);
                         btnSet.setEnabled(false);
+                        btnLED0.setEnabled(false);
+                        btnLED1.setEnabled(false);
+                        btnLED2.setEnabled(false);
+                        btnLED3.setEnabled(false);
+                        btnLED4.setEnabled(false);
                         ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
                         listAdapter.add("[" + currentDateTimeString + "] Disconnected to: " + mDevice.getName());
                         mState = UART_PROFILE_DISCONNECTED;
