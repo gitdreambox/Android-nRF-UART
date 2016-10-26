@@ -124,13 +124,13 @@
                     android:onClick="onClick"
                     android:enabled="false"
                     android:text="OTA" />
-                <!--<Button-->
-                    <!--android:id="@+id/btnDataPoint"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:onClick="onClick"-->
-                    <!--android:enabled="false"-->
-                    <!--android:text="DataPoint" />-->
+                <Button
+                    android:id="@+id/btnDataPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    android:enabled="false"
+                    android:text="DataPoint" />
             </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"

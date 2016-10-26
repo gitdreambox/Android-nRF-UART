@@ -225,7 +225,7 @@ public class ProtocolPacket {
         }
         if (mValueOffset >= 5) {
             if ((mValue[0] & 0xFF) == 0xA5) {
-                mRecvDataLen = (((this.mValue[1] & 0xFF) << 8) + (this.mValue[2] & 0xFF)) + 3;
+                mRecvDataLen = (((this.mValue[1] & 0xFF) << 8) + (this.mValue[2] & 0xFF)) + 2;
                 if (mRecvDataLen > mValue.length) resetRecv();
                 if (bool == false) {
                     System.arraycopy(data, 0, this.mValue, this.mValueOffset, data.length);

@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
     private ArrayAdapter<String> listAdapter;
-    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnOTA, btnShowLog,btnSet;
+    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnOTA,btnDataPoint, btnShowLog,btnSet;
     private ToggleButton btnLED0,btnLED1,btnLED2,btnLED3,btnLED4;
     private Spinner spinnerInterval,spinnerTxPower;
     private ProtocolPacket TxPacket, RxPacket;
@@ -100,7 +100,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         btnConnectDisconnect = (Button) findViewById(R.id.btn_select);
         btnSyncInfo = (Button) findViewById(R.id.btnSyncInfo);
         btnAuth = (Button) findViewById(R.id.btnAuth);
-        //btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
+        btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
         btnOTA = (Button) findViewById(R.id.btnOTA);
         btnShowLog = (Button) findViewById(R.id.btnShowLog);
         btnSet = (Button) findViewById(R.id.btnSet);
@@ -151,11 +151,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             case R.id.btnOTA:
                 OTA();
                 break;
-//            case R.id.btnDataPoint: {
-//                byte[] b = new byte[]{0x05, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
-//                DataPoint(b);
-//            }
-//                break;
+            case R.id.btnDataPoint: {
+                byte[] b = new byte[]{0x02};
+                DataPoint(b);
+            }
+                break;
             case R.id.btnLED0:
             {
                 byte[] b;
@@ -266,7 +266,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnConnectDisconnect.setText("Disconnect");
                         btnSyncInfo.setEnabled(true);
                         btnAuth.setEnabled(true);
-                        //btnDataPoint.setEnabled(true);
+                        btnDataPoint.setEnabled(true);
                         btnOTA.setEnabled(true);
                         btnShowLog.setEnabled(true);
                         btnSet.setEnabled(true);
@@ -290,7 +290,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         btnConnectDisconnect.setText("Connect");
                         btnSyncInfo.setEnabled(false);
                         btnAuth.setEnabled(false);
-                        //btnDataPoint.setEnabled(false);
+                        btnDataPoint.setEnabled(false);
                         btnOTA.setEnabled(false);
                         btnSet.setEnabled(false);
                         btnLED0.setEnabled(false);
@@ -507,7 +507,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     @Override
     public void DataPointResponse(byte[] data) {
-        printLog("SyncInfoRes:"
+        printLog("DataPointResponse:"
                 + "\r\ndata=" + hexUtils.bytesToHexString(data)
                 + "\r\n"
         );
