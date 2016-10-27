@@ -150,6 +150,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 break;
             case R.id.btnOTA:
                 OTA();
+//                if (mDevice != null) {
+//                    mService.disconnect();
+//                }
+//                startActivity(new Intent(this,DFUActivity.class));
                 break;
             case R.id.btnDataPoint: {
                 byte[] b = new byte[]{0x02};
@@ -387,7 +391,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
-
     }
 
     @Override
@@ -498,6 +501,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 + "\r\nstatusCode=" + statusCode
                 + "\r\n"
         );
+        if (mDevice != null) {
+            mService.disconnect();
+            mService.close();
+        }
+        startActivity(new Intent(this,DFUActivity.class));
     }
 
     @Override

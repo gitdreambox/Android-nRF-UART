@@ -21,4 +21,6 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
     compile 'no.nordicsemi.android:log:2.0.0'
+    compile 'no.nordicsemi.android:dfu:1.0.4'
+    compile 'com.android.support:appcompat-v7:18.0.0'
 }
