@@ -167,29 +167,38 @@ public class ProtocolPacket {
         broadcastLog(log);
         Log.i("Packet", log);
         if (check == checksum) {
+            if(this.cmd==0x00) {
+                int _offset = 0;
+            }
             switch (this.cmd) {
-                case 0x01: {
+                case 0x00:{
                     int _offset = 0;
-                    int statusCode=payload[_offset++]&0xFF;
                     String productKey = hexUtils.bytesToHexString(payload, _offset, 16);
                     _offset += 16;
                     String mac = hexUtils.bytesToHexString(payload, _offset, 6);
                     _offset += 6;
-                    String hardwareVersion = hexUtils.bytesToString(payload, _offset, 8);
-                    _offset += 8;
-                    String softwareVersion = hexUtils.bytesToString(payload, _offset, 8);
-                    _offset += 8;
-                    String protocolVersion = hexUtils.bytesToString(payload, _offset, 8);
-                    mCallbacks.SyncInfoResponse(productKey, mac, hardwareVersion, softwareVersion, protocolVersion);
+                    int random = ((payload[_offset++] & 0xFF)<< 24) + ((payload[_offset++] & 0xFF) << 16) + ((payload[_offset++] & 0xFF) << 8) + ((payload[_offset++] & 0xFF) );
+                    mCallbacks.Start(productKey,mac,random);
+                }
+                break;
+                case 0x01: {
+                    payload=AES.Decrypt(payload,AES.KEY);
+                    int _offset = 0;
+                    String sessionKey=hexUtils.bytesToHexString(payload, _offset, 16);
+                    _offset += 16;
+                    boolean encrypt = payload[_offset++] == 0 ? false : true;
+                    mCallbacks.AuthResponse(sessionKey, encrypt);
                 }
 
                 break;
                 case 0x02: {
                     int _offset = 0;
-                    int statusCode = payload[_offset++] & 0xFF;
-                    boolean encrypt = payload[_offset++] == 0 ? false : true;
-                    int random = (payload[_offset++] & 0xFF) + ((payload[_offset++] & 0xFF) << 8) + ((payload[_offset++] & 0xFF) << 16) + ((payload[_offset++] & 0xFF) << 24);
-                    mCallbacks.AuthResponse(encrypt, random);
+                    String hardwareVersion = hexUtils.bytesToString(payload, _offset, 8);
+                    _offset += 8;
+                    String softwareVersion = hexUtils.bytesToString(payload, _offset, 8);
+                    _offset += 8;
+                    String protocolVersion = hexUtils.bytesToString(payload, _offset, 8);
+                    mCallbacks.SyncInfoResponse(hardwareVersion, softwareVersion, protocolVersion);
                 }
                     break;
                 case 0x03: {
@@ -319,8 +328,18 @@ public class ProtocolPacket {
     }
 
     public void setValue(byte[] value, int offset, int length) {
+//        for(int i=0;i<length;i++){
+//            mValue[mValueOffset++]=value[offset+length-1+i];
+//        }
         System.arraycopy(value, offset, mValue, mValueOffset, length);
         mValueOffset += length;
+    }
+    public void setEncrypt(){
+        byte[] buf=new byte[mValueOffset];
+        System.arraycopy(mValue,0,buf,0,mValueOffset);
+        byte[] encrypt=AES.Encrypt(buf,AES.KEY);
+        System.arraycopy(encrypt, 0, mValue, 0, encrypt.length);
+        mValueOffset=encrypt.length;
     }
 
     public void setGattCallbacks(GizwitsServiceCallbacks callbacks) {

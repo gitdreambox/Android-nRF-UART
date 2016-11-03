@@ -4,9 +4,11 @@ package com.nordicsemi.nrfUARTv2;
  * Created by dream on 2016/9/7.
  */
 public interface GizwitsServiceCallbacks {
-    void SyncInfoResponse(String productKey, String mac, String hardwareVersion, String softwareVersion, String protocolVersion);
+    void Start(String productKey, String mac, int random);
 
-    void AuthResponse(boolean encrypt, int random);
+    void AuthResponse(String sessionKey,boolean encrypt);
+
+    void SyncInfoResponse(String hardwareVersion, String softwareVersion, String protocolVersion);
 
     void OTAResponse(int statusCode);
 

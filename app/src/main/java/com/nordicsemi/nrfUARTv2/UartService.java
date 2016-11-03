@@ -188,9 +188,9 @@ public class UartService extends Service {
 
         // This is handling for the notification on TX Character of NUS service
         if (TX_CHAR_UUID.equals(characteristic.getUuid())) {
-
-           // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
-            intent.putExtra(EXTRA_DATA, characteristic.getValue());
+            byte[] value=characteristic.getValue();
+            Log.d(TAG, hexUtils.bytesToHexString(value));
+            intent.putExtra(EXTRA_DATA,value);
         } else {
 
         }

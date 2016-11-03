@@ -70,13 +70,13 @@
             android:layout_weight="1">
 
             <Spinner
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:id="@+id/spinnerInterval"
                 android:entries="@array/interval" />
 
             <Spinner
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:id="@+id/spinnerTxPower"
                 android:entries="@array/txpower" />
@@ -89,49 +89,49 @@
                 android:enabled="false"
                 android:onClick="onClick" />
 
-            <Button
-                android:id="@+id/btnShowLog"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:onClick="onClick"
-                android:enabled="false"
-                android:text="Log" />
+            <!--<Button-->
+                <!--android:id="@+id/btnShowLog"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:onClick="onClick"-->
+                <!--android:enabled="false"-->
+                <!--android:text="Log" />-->
 
         </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:orientation="horizontal"
-                android:layout_weight="1">
-                <Button
-                    android:id="@+id/btnSyncInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="SyncInfo" />
-                <Button
-                    android:id="@+id/btnAuth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="Auth" />
-                <Button
-                    android:id="@+id/btnOTA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="OTA" />
-                <Button
-                    android:id="@+id/btnDataPoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="onClick"
-                    android:enabled="false"
-                    android:text="DataPoint" />
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_weight="1">-->
+                <!--<Button-->
+                    <!--android:id="@+id/btnSyncInfo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:enabled="false"-->
+                    <!--android:text="SyncInfo" />-->
+                <!--<Button-->
+                    <!--android:id="@+id/btnAuth"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:enabled="false"-->
+                    <!--android:text="Auth" />-->
+                <!--<Button-->
+                    <!--android:id="@+id/btnOTA"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:enabled="false"-->
+                    <!--android:text="OTA" />-->
+                <!--<Button-->
+                    <!--android:id="@+id/btnDataPoint"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:enabled="false"-->
+                    <!--android:text="DataPoint" />-->
+            <!--</LinearLayout>-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

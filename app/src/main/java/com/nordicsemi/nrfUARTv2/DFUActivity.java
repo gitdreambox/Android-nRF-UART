@@ -132,16 +132,17 @@ public class DFUActivity extends Activity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
     private void startDFU(){
+        String MAC=getIntent().getStringExtra("mac");
         mProgressBar.setVisibility(View.VISIBLE);
         mTextPercentage.setVisibility(View.VISIBLE);
         mTextPercentage.setText("");
-        final DfuServiceInitiator starter = new DfuServiceInitiator("C3:6D:45:A2:86:B3")
+        final DfuServiceInitiator starter = new DfuServiceInitiator(MAC)
                 .setDeviceName("Gizwits BLE")
                 .setKeepBond(false)
                 .setForceDfu(false)
                 .setPacketsReceiptNotificationsEnabled(true)
                 .setPacketsReceiptNotificationsValue(12);
-        starter.setZip(null, "/storage/emulated/0/Tencent/QQfile_recv/DFU_nrf51822_xxaa_s130_20161026.zip");
+        starter.setZip(null, "/storage/emulated/0/Tencent/QQfile_recv/DFU_nrf51822_xxaa_s130_20161102.zip");
 //        // Init packet is required by Bootloader/DFU from SDK 7.0+ if HEX or BIN file is given above.
 //        // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
 //        if (mFileType == DfuService.TYPE_AUTO)

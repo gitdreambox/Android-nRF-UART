@@ -27,6 +27,7 @@ package com.nordicsemi.nrfUARTv2;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -77,11 +78,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
     private ArrayAdapter<String> listAdapter;
-    private Button btnConnectDisconnect, btnSyncInfo, btnAuth, btnOTA,btnDataPoint, btnShowLog,btnSet;
+    private Button btnConnectDisconnect,btnSet;//btnSyncInfo, btnAuth, btnOTA,btnDataPoint, btnShowLog,
     private ToggleButton btnLED0,btnLED1,btnLED2,btnLED3,btnLED4;
     private Spinner spinnerInterval,spinnerTxPower;
     private ProtocolPacket TxPacket, RxPacket;
     private ArrayList<Byte> buffer = new ArrayList<Byte>();
+    private int mRandom=0;
+    private byte[] mSessionKey;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,11 +101,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         messageListView.setAdapter(listAdapter);
         messageListView.setDivider(null);
         btnConnectDisconnect = (Button) findViewById(R.id.btn_select);
-        btnSyncInfo = (Button) findViewById(R.id.btnSyncInfo);
-        btnAuth = (Button) findViewById(R.id.btnAuth);
-        btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
-        btnOTA = (Button) findViewById(R.id.btnOTA);
-        btnShowLog = (Button) findViewById(R.id.btnShowLog);
+//        btnSyncInfo = (Button) findViewById(R.id.btnSyncInfo);
+//        btnAuth = (Button) findViewById(R.id.btnAuth);
+//        btnDataPoint = (Button) findViewById(R.id.btnDataPoint);
+//        btnOTA = (Button) findViewById(R.id.btnOTA);
+//        btnShowLog = (Button) findViewById(R.id.btnShowLog);
         btnSet = (Button) findViewById(R.id.btnSet);
         spinnerInterval= (Spinner) findViewById(R.id.spinnerInterval);
         spinnerTxPower= (Spinner) findViewById(R.id.spinnerTxPower);
@@ -142,24 +145,24 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSyncInfo:
-                SyncInfo();
-                break;
-            case R.id.btnAuth:
-                Auth();
-                break;
-            case R.id.btnOTA:
-                OTA();
-//                if (mDevice != null) {
-//                    mService.disconnect();
-//                }
-//                startActivity(new Intent(this,DFUActivity.class));
-                break;
-            case R.id.btnDataPoint: {
-                byte[] b = new byte[]{0x02};
-                DataPoint(b);
-            }
-                break;
+//            case R.id.btnSyncInfo:
+//                SyncInfo();
+//                break;
+//            case R.id.btnAuth:
+//                //Auth();
+//                break;
+//            case R.id.btnOTA:
+//                OTA();
+////                if (mDevice != null) {
+////                    mService.disconnect();
+////                }
+////                startActivity(new Intent(this,DFUActivity.class));
+//                break;
+//            case R.id.btnDataPoint: {
+//                byte[] b = new byte[]{0x02};
+//                DataPoint(b);
+//            }
+//                break;
             case R.id.btnLED0:
             {
                 byte[] b;
@@ -196,13 +199,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 DataPoint(b);
                 break;
             }
-            case R.id.btnShowLog:
-                if (mLogSession != null) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, mLogSession.getSessionUri());//Show log entries
-                    //Intent intent = new Intent(Intent.ACTION_VIEW, ((LogSession) mLogSession).getSessionsUri());//Show all log sessions
-                    startActivity(intent);
-                }
-                break;
+//            case R.id.btnShowLog:
+//                if (mLogSession != null) {
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, mLogSession.getSessionUri());//Show log entries
+//                    //Intent intent = new Intent(Intent.ACTION_VIEW, ((LogSession) mLogSession).getSessionsUri());//Show all log sessions
+//                    startActivity(intent);
+//                }
+//                break;
             case R.id.btnSet:
                 int[] intervalArray={6,15,24,39,80,400,800};
                 int[] txpowerArrsy={4,0,-20};
@@ -217,6 +220,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     private void printLog(String log) {
         Logger.i(mLogSession, log);
+        Log.i("printLog",log);
         String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
         listAdapter.add("[" + currentDateTimeString + "] " + log);
         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
@@ -268,11 +272,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                         Log.d(TAG, "UART_CONNECT_MSG");
                         btnConnectDisconnect.setText("Disconnect");
-                        btnSyncInfo.setEnabled(true);
-                        btnAuth.setEnabled(true);
-                        btnDataPoint.setEnabled(true);
-                        btnOTA.setEnabled(true);
-                        btnShowLog.setEnabled(true);
+//                        btnSyncInfo.setEnabled(true);
+//                        btnAuth.setEnabled(true);
+//                        btnDataPoint.setEnabled(true);
+//                        btnOTA.setEnabled(true);
+//                        btnShowLog.setEnabled(true);
                         btnSet.setEnabled(true);
                         btnLED0.setEnabled(true);
                         btnLED1.setEnabled(true);
@@ -292,10 +296,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                         Log.d(TAG, "UART_DISCONNECT_MSG");
                         btnConnectDisconnect.setText("Connect");
-                        btnSyncInfo.setEnabled(false);
-                        btnAuth.setEnabled(false);
-                        btnDataPoint.setEnabled(false);
-                        btnOTA.setEnabled(false);
+//                        btnSyncInfo.setEnabled(false);
+//                        btnAuth.setEnabled(false);
+//                        btnDataPoint.setEnabled(false);
+//                        btnOTA.setEnabled(false);
                         btnSet.setEnabled(false);
                         btnLED0.setEnabled(false);
                         btnLED1.setEnabled(false);
@@ -316,6 +320,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
             if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
                 final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+                Log.i("TxPacket",hexUtils.bytesToHexString(txValue));
                 TxPacket.addRecvData(txValue);
             }
             if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
@@ -473,27 +478,46 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         }
     }
 
-
     @Override
-    public void SyncInfoResponse(String productKey, String mac, String hardwareVersion, String softwareVersion, String protocolVersion) {
-        printLog("SyncInfoRes:"
+    public void Start(String productKey, String mac, int random) {
+        mRandom=random;
+        printLog("Start:"
                 + "\r\nproductKey=" + productKey
                 + "\r\nmac=" + mac
+                + "\r\nrandom=" + random
+                + "\r\n"
+        );
+        Auth();
+    }
+
+    @Override
+    public void AuthResponse(String sessionKey,boolean encrypt) {
+        printLog("AuthRes:"
+                + "\r\nsessionKey=" + sessionKey
+                + "\r\nencrypt=" + encrypt
+                + "\r\n"
+        );
+        if(sessionKey.equals(hexUtils.bytesToHexString(mSessionKey)))
+        {
+            SyncInfo();
+        }
+    }
+
+    @Override
+    public void SyncInfoResponse(String hardwareVersion, String softwareVersion, String protocolVersion) {
+        printLog("SyncInfoRes:"
                 + "\r\nhardwareVersion=" + hardwareVersion
                 + "\r\nsoftwareVersion=" + softwareVersion
                 + "\r\nprotocolVersion=" + protocolVersion
                 + "\r\n"
         );
+        if(!softwareVersion.equals("00000002"))
+        {
+            OTA();
+        }
     }
 
-    @Override
-    public void AuthResponse(boolean encrypt, int random) {
-        printLog("AuthRes:"
-                + "\r\nencrypt=" + encrypt
-                + "\r\nrandom=" + random
-                + "\r\n"
-        );
-    }
+
 
     @Override
     public void OTAResponse(int statusCode) {
@@ -505,7 +529,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             mService.disconnect();
             mService.close();
         }
-        startActivity(new Intent(this,DFUActivity.class));
+        startActivity(new Intent(this,DFUActivity.class).putExtra("mac", mDevice.getAddress()));
     }
 
     @Override
@@ -524,6 +548,25 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     public static final int PLATFORM_ANDROID = 0x01;
     public static final int PLATFORM_WP = 0x02;
     public static final int PLATFORM_OTHER = 0x03;
+    private void Auth() {
+        mSessionKey = new byte[16];
+        Random random=new Random();
+        random.nextBytes(mSessionKey);
+        Auth(mSessionKey, mRandom);
+    }
+
+    private void Auth(byte[] sessionKey, int random) {
+        RxPacket.setValue(sessionKey, 0, 16);
+        RxPacket.setValue(random, ProtocolPacket.FORMAT_UINT32);
+        RxPacket.setEncrypt();
+        mService.writeRXCharacteristic(RxPacket.getValue(0x01));
+        printLog("AuthReq:"
+                + "\r\nsessionKey=" + hexUtils.bytesToHexString(sessionKey, 0, 16)
+                + "\r\nrandom=" + random
+                + "\r\n"
+        );
+    }
+
     private void SyncInfo() {
         SyncInfo(PLATFORM_ANDROID, System.currentTimeMillis() / 1000, "AABBCCDDEEFF00112233445566778899");
     }
@@ -532,7 +575,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         RxPacket.setValue(platformType, ProtocolPacket.FORMAT_UINT8);
         RxPacket.setValue(timestamp, ProtocolPacket.FORMAT_UINT32);
         RxPacket.setValue(hexUtils.hexStringToBytes(UID.substring(0, 32)));
-        mService.writeRXCharacteristic(RxPacket.getValue(0x01));
+        mService.writeRXCharacteristic(RxPacket.getValue(0x02));
         printLog("SyncInfoReq:"
                 + "\r\nplatformType=" + platformType
                 + "\r\ntimestamp=" + timestamp
@@ -541,28 +584,6 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         );
     }
 
-    private void Auth() {
-        byte[] mac = hexUtils.hexStringToBytes(mDevice.getAddress().replace(":", ""));
-        byte[] sessionKey = new byte[16];
-        int random = (int) (Math.random() * 65535);
-        for (int i = 0; i < 16; i++) {
-            sessionKey[i] = (byte) (Math.random() * 256);
-        }
-        Auth(mac, sessionKey, random);
-    }
-
-    private void Auth(byte[] mac, byte[] sessionKey, int random) {
-        RxPacket.setValue(mac, 0, 6);
-        RxPacket.setValue(sessionKey, 0, 16);
-        RxPacket.setValue(random, ProtocolPacket.FORMAT_UINT32);
-        mService.writeRXCharacteristic(RxPacket.getValue(0x02));
-        printLog("AuthReq:"
-                + "\r\nmac=" + hexUtils.bytesToHexString(mac, 0, 6)
-                + "\r\nsessionKey=" + hexUtils.bytesToHexString(sessionKey, 0, 16)
-                + "\r\nrandom=" + random
-                + "\r\n"
-        );
-    }
 
     private void OTA() {
         mService.writeRXCharacteristic(RxPacket.getValue(0x03));
